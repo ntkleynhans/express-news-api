@@ -1,8 +1,10 @@
 const express = require('express');
+const request = require('request');
 const stories = require('./stories');
 
 const app = express();
 const PORT = 3000;
+const TOP_STORIES_URL = 'https://hacker-news.firebaseio.com/v0/topstories.json';
 
 app.use((req, res, next) => {
   console.log('Request: ', req.method, req.url, req.headers);
@@ -34,6 +36,12 @@ app.get('/stories/:id', (req, res) => {
   res.json(stories.filter(story => story.id == id));
 });
 
+app.get('/topstories', (req, res) => {
+  request({ url: TOP_STORIES_URL },
+   (error, response, body) => {
+    res.json(JSON.parse(body));
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
