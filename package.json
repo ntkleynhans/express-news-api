@@ -1,0 +1,23 @@
+{
+  "name": "news",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntkleynhans/express-news-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ntkleynhans/express-news-api/issues"
+  },
+  "homepage": "https://github.com/ntkleynhans/express-news-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
