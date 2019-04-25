@@ -4,6 +4,16 @@ const stories = require('./stories');
 const app = express();
 const PORT = 3000;
 
+app.use((req, res, next) => {
+  console.log('Request: ', req.method, req.url, req.headers);
+  next();
+});
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
