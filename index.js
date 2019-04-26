@@ -4,7 +4,9 @@ const stories = require('./stories');
 
 const app = express();
 const PORT = 3000;
-const TOP_STORIES_URL = 'https://hacker-news.firebaseio.com/v0/topstories.json';
+const BASE_URL = 'https://hacker-news.firebaseio.com/v0';
+const TOP_STORIES_URL = `${BASE_URL}/topstories.json`;
+const LIMIT = 10;
 
 app.use((req, res, next) => {
   console.log('Request: ', req.method, req.url, req.headers);
@@ -40,10 +42,29 @@ app.get('/topstories', (req, res, next) => {
   request({url: TOP_STORIES_URL},
     (error, response, body) => {
       if (error || response.statusCode !== 200 || !response.headers['content-type'].includes('application/json')){
-        console.log(error);
         return next(new Error('Error requesting top stories!'));
       }
-      res.json(JSON.parse(body));
+
+      const topStories = JSON.parse(body);
+
+      Promise.all(
+        topStories.slice(0, LIMIT).map(story => {
+          return new Promise((resolve, reject) => {
+            request( {url: `${BASE_URL}/item/${story}.json`},
+              (error, response, body) => {
+                if (error || response.statusCode !== 200 || !response.headers['content-type'].includes('application/json')){
+                  return reject(new Error('Error requesting story item!'));
+                }
+
+                resolve(JSON.parse(body));
+              });
+          })
+        })
+      )
+      .then(fullTopStories => {
+        res.json(fullTopStories);
+      })
+      .catch(error => next(error));
     });
 });
 
