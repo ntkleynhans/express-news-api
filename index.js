@@ -4,7 +4,7 @@ const path = require('path');
 const stories = require('./stories');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const BASE_URL = 'https://hacker-news.firebaseio.com/v0';
 const TOP_STORIES_URL = `${BASE_URL}/topstories.json`;
 const LIMIT = 10;

@@ -5,7 +5,7 @@ class App extends Component {
   state = { stories: [] }
 
   componentDidMount() {
-    fetch("http://192.168.8.145:3000/topstories")
+    fetch(`${document.location.origin}/topstories`)
     .then(response => response.json())
     .then(json => {
       console.log(json);
