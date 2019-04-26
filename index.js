@@ -36,11 +36,20 @@ app.get('/stories/:id', (req, res) => {
   res.json(stories.filter(story => story.id == id));
 });
 
-app.get('/topstories', (req, res) => {
-  request({ url: TOP_STORIES_URL },
-   (error, response, body) => {
-    res.json(JSON.parse(body));
-  });
+app.get('/topstories', (req, res, next) => {
+  request({url: TOP_STORIES_URL},
+    (error, response, body) => {
+      if (error || response.statusCode !== 200 || !response.headers['content-type'].includes('application/json')){
+        console.log(error);
+        return next(new Error('Error requesting top stories!'));
+      }
+      res.json(JSON.parse(body));
+    });
+});
+
+app.use((err, req, res, next) => {
+  console.log('err', err);
+  res.status(500).json({type: 'error', message: err.message});
 });
 
 app.listen(PORT, () => {
