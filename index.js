@@ -1,5 +1,6 @@
 const express = require('express');
 const request = require('request');
+const path = require('path');
 const stories = require('./stories');
 
 const app = express();
@@ -17,6 +18,8 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();
 });
+
+app.use(express.static(path.join(__dirname, "client/dist")));
 
 app.get('/ping', (req, res) => {
   res.send('pong');
